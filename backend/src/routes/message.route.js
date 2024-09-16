@@ -1,8 +1,12 @@
 const express = require("express");
+const authenticate = require("../middlewares/authenticate.middleware");
+const User = require("../models/user.model");
+const Conversation = require("../models/conversation.model");
+const Message = require("../models/message.model");
 
 const router = express.Router();
 
-router.post("/send", async(req, res) => {
+router.post("/send", authenticate, async(req, res) => {
     try {
         const { targetId, message } = req.body
 
@@ -10,7 +14,28 @@ router.post("/send", async(req, res) => {
             return res.status(422).json({ message: "Field(s) missing" })
         }
 
-        
+        const user = await User.findById(req.user.id)
+        if(user) {
+            let conversation = await Conversation.findOne({ participants: { $all: [user._id, targetId] } })
+            if (!conversation) {
+                conversation = await Conversation.create({ participants: [user._id, targetId] })
+            }
+
+            const newMessage = new Message({
+                senderId: user._id,
+                receiverId: targetId,
+                message
+            })
+
+            conversation.messages.push(newMessage)
+
+            await Promise.all([conversation.save(), newMessage.save()])
+
+            res.status(201).json({ message: newMessage })
+        }
+        else {
+            return res.status(401).json({ message: "Unauthorized" })
+        }
     }
     catch(error) {
         return res.status(500).json({ message: error.message });
