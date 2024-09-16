@@ -1,11 +1,20 @@
-const express = require('express')
-const dotenv = require('dotenv')
+const express = require("express");
+const authRouter = require("./src/routes/auth.route");
+const connectDB = require("./src/config/db.config.js");
 
-dotenv.config()
-const app = express()
+require("dotenv").config();
 
-app.get('/', async(req, res) => {
-    res.status(200).json({ message: 'Success' })
-})
+const app = express();
 
-app.listen(process.env.PORT, () => console.log(`Server is running on port ${process.env.PORT}`))
+app.use(express.json());
+
+app.get("/", async (req, res) => {
+  res.status(200).json({ message: "Success" });
+});
+
+app.use("/api/auth", authRouter);
+
+app.listen(process.env.PORT, () => {
+  connectDB();
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
