@@ -32,7 +32,9 @@ router.post("/signup", async (req, res) => {
             username,
             password: hash,
             gender,
-            displayPic: randomPic
+            displayPic: randomPic,
+            createdAt,
+            updatedAt
         })
         await newUser.save()
         
@@ -66,7 +68,8 @@ router.post("/login", async (req, res) => {
                     username: user.username,
                     gender: user.gender,
                     displayPic: user.displayPic,
-                    accessToken })
+                    accessToken,
+                    updatedAt })
             }
             else {
                 return res.status(401).json({ message: "Unauthorized" })
@@ -84,7 +87,7 @@ router.post("/login", async (req, res) => {
 router.post("/logout", async (req, res) => {
     try {
         const { userId } = req.body
-        
+
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
