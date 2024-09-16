@@ -1,6 +1,7 @@
 const express = require("express");
 const authRouter = require("./src/routes/auth.route");
-const messageRouter = require("./src/routes/message.route")
+const messageRouter = require("./src/routes/message.route");
+const userRouter = require("./src/routes/user.route.js");
 const connectDB = require("./src/config/db.config.js");
 
 require("dotenv").config();
@@ -15,6 +16,7 @@ app.get("/", async (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/message", messageRouter);
+app.use("/api/user", userRouter);
 
 app.listen(process.env.PORT, () => {
   connectDB();
