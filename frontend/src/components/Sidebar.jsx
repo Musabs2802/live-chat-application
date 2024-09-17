@@ -32,7 +32,7 @@ const Sidebar = () => {
             <div className="flex items-center space-x-3">
               <div className="avatar">
                 <div className="w-12 rounded-full bg-blue-500 flex items-center justify-center">
-                <img src='https://avatar.iran.liara.run/public'/>
+                    <img src='https://avatar.iran.liara.run/public'/>
                 </div>
               </div>
               <div className='flex flex-col items-stretch justify-between'>
@@ -60,7 +60,7 @@ const Sidebar = () => {
             <div className="flex items-center space-x-3">
               <div className="avatar">
                 <div className="w-12 rounded-full bg-red-500 flex items-center justify-center">
-                <img src='https://avatar.iran.liara.run/public'/>
+                    <img src='https://avatar.iran.liara.run/public'/>
                 </div>
               </div>
               <div className='flex flex-col items-stretch justify-between'>
