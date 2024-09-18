@@ -33,14 +33,13 @@ router.post("/signup", async (req, res) => {
             password: hash,
             gender,
             displayPic: randomPic,
-            createdAt,
-            updatedAt
         })
         await newUser.save()
         
         res.status(201).json({ message: "Item created", _id: newUser._id })
     } 
     catch (error) {
+        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 });
@@ -69,7 +68,8 @@ router.post("/login", async (req, res) => {
                     gender: user.gender,
                     displayPic: user.displayPic,
                     accessToken,
-                    updatedAt })
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt })
             }
             else {
                 return res.status(401).json({ message: "Unauthorized" })

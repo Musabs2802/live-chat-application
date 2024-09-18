@@ -2,27 +2,19 @@ import React from 'react'
 
 const Conversation = () => {
 	return (
-		<>
-			<div className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
-				<div className='avatar online'>
-					<div className='w-12 rounded-full'>
-						<img
-							src='https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png'
-							alt='user avatar'
-						/>
-					</div>
-				</div>
-
-				<div className='flex flex-col flex-1'>
-					<div className='flex gap-3 justify-between'>
-						<p className='font-bold text-gray-800'>John Doe</p>
-						<span className='text-xl'>🎃</span>
-					</div>
-				</div>
-			</div>
-
-			<div className='divider my-0 py-0 h-1' />
-		</>
+		<li className="p-3 hover:bg-gray-800 cursor-pointer">
+            <div className="flex items-center space-x-3">
+              <div className="avatar">
+                <div className="w-12 rounded-full bg-blue-500 flex items-center justify-center">
+                    <img src='https://avatar.iran.liara.run/public'/>
+                </div>
+              </div>
+              <div className='flex flex-col items-stretch justify-between'>
+                <h3 className="text-md font-sans">Alice</h3>
+                <p className="text-sm text-gray-400">Hey, how’s it going?</p>
+              </div>
+            </div>
+          </li>
 	);
 };
 export default Conversation;

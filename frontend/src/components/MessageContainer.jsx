@@ -68,7 +68,7 @@ const MessageContainer = () => {
       </div>
 
       {/* Chat Input */}
-      <div className="p-4 bg-white border-t border-gray-300 flex items-center space-x-3">
+      <div className="p-4 bg-white border-gray-300 flex items-center space-x-3">
         <input
           type="text"
           placeholder="Type a message..."
