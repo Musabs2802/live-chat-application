@@ -10,6 +10,7 @@ const MessageContainer = () => {
     const { authUser } = useAuthContext();
     const { currentConversation } = useConversationContext();
     const [ messages, setMessages ] = useState([]);
+    const [ inputMessage, setInputMessage ] = useState();
 
     useEffect(() => {
         const fetchConversation = async () => {
@@ -28,7 +29,19 @@ const MessageContainer = () => {
         fetchConversation()
     }, [currentConversation]);
     
-    console.log(messages);
+    const handleNewMessageSent = async () => {
+        try {
+            if(inputMessage.trim() !== '') {
+                await axios.post(`http://localhost:8080/api/message/send/${currentConversation._id}`, { message: inputMessage }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+            }
+        }
+        catch (error) {
+
+        }
+        finally {
+            setInputMessage('');
+        }
+    }
 
     return currentConversation ? (
         <div className="flex flex-col h-screen w-full">
@@ -58,12 +71,15 @@ const MessageContainer = () => {
 
         {/* Chat Input */}
         <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3 px-10 gap-5">
-            <input
-            type="text"
-            placeholder="Type a message..."
-            className="input input-bordered w-full"
+            <textarea
+                type="text"
+                placeholder="Type a message..."
+                className="textarea textarea-bordered w-full text-sm"
+                rows={2}
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
             />
-            <IoSend className='w-8 h-8 text-gray-500'/>
+            <IoSend className='w-10 h-10 text-gray-500 bg-gray-800 hover:bg-gray-700 p-2 rounded-lg' onClick={handleNewMessageSent}/>
         </div>
         </div>
     ) : 
