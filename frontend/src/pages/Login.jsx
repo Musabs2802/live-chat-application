@@ -2,9 +2,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../../backend/src/context/authContext';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { setAuthUser } = useAuthContext();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,8 +15,10 @@ const Login = () => {
         e.preventDefault();
         try {
             const res = await axios.post('http://localhost:8080/api/auth/login', { username, password })
-            console.log(res)
             if (res.status == 200) {
+                localStorage.setItem("authUser", JSON.stringify(res.data))
+                setAuthUser(res.data)
+
                 toast.success("Login Successful !")
                 navigate('/')
             }
@@ -22,7 +27,8 @@ const Login = () => {
             }
         }
         catch (error) {
-            toast.error("Something went wrong !")
+            console.log("Error", error)
+            toast.error("Something went wrong !", error)
         }
     };
 

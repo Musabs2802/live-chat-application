@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -28,6 +29,7 @@ const Signup = () => {
             setError('');
             const res = await axios.post('http://localhost:8080/api/auth/signup', {...formData})
             if (res.status == 201) {
+                toast.success("User registered")
                 navigate('/login')
             }
             else {
