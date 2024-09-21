@@ -18,7 +18,7 @@ const Conversation = ({ user, message, isSent }) => {
               </div>
               <div className='flex flex-col items-stretch justify-between'>
                 <h3 className="text-md font-sans">{user.firstName} {user.lastName}</h3>
-                <p className="text-sm text-gray-400">{isSent ? `Sent: ${message.message}` : message.message}</p>
+                <p className="text-sm text-gray-400">{message ? isSent ? `Sent: ${message.message}` : message.message : user.username}</p>
               </div>
             </div>
           </li>

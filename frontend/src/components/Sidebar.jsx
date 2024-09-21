@@ -13,7 +13,30 @@ const Sidebar = () => {
     
     const { authUser, setAuthUser } = useAuthContext();
     const [ conversations, setConversations ] = useState([]);
+    const [ searchUsers, setSearchUsers ] = useState([]);
     
+    const handleSearch = async (e) => {
+        try {
+            const query = e.target.value
+
+            if (query) {
+                const res = await axios.get(`http://localhost:8080/api/user/search/${query}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                if (res.status == 200) {
+                    setSearchUsers(res.data)
+                }
+                else {
+                    toast.error("Cannot fetch users !")
+                }
+            }
+            else {
+                setSearchUsers([]);
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         const getConversations = async () => {
             try {
@@ -59,11 +82,13 @@ const Sidebar = () => {
             </div>
         </div>
 
-        <SearchBar />
+        <SearchBar handleSearch={handleSearch}/>
 
         <div className="flex-1 overflow-y-auto bg-gray-900">
             <ul className="divide-y divide-gray-700">
-                {conversations.length > 0 ? conversations.map((convo, id) => (
+                {searchUsers.length > 0 ? searchUsers.map((u, id) => (
+                    <Conversation key={u._id} user={u} />
+                )) : conversations.length > 0 ? conversations.map((convo, id) => (
                     <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id}/>
                 )) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
                         <span className='text-sm text-gray-400'>No conversations to show</span>
