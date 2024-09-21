@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { IoMdAddCircle } from 'react-icons/io';
 import { PiSignOutBold } from "react-icons/pi";
 import SearchBar from './SearchBar';
 import Conversation from './Conversation';
@@ -75,9 +74,9 @@ const Sidebar = () => {
                     <button className="btn btn-ghost btn-circle">
                         <PiSignOutBold className='text-xl' onClick={handleLogout}/>
                     </button>
-                    <button className="btn btn-ghost btn-circle">
+                    {/* <button className="btn btn-ghost btn-circle">
                         <IoMdAddCircle className='text-xl'/>
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>
@@ -91,7 +90,7 @@ const Sidebar = () => {
                 )) : conversations.length > 0 ? conversations.map((convo, id) => (
                     <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id}/>
                 )) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
-                        <span className='text-sm text-gray-400'>No conversations to show</span>
+                        <span className='text-sm text-gray-400'>No available chats</span>
                     </div>}
             </ul>
         </div>

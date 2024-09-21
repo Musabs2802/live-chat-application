@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IoSend } from "react-icons/io5";
 import { useAuthContext } from '../../../backend/src/context/authContext';
 import { useConversationContext } from '../../../backend/src/context/conversationContext';
+import imgGuyWithDepression from '../assets/guy-with-depression.png';
 import axios from 'axios';
 import Chat from './Chat';
 
@@ -65,7 +66,13 @@ const MessageContainer = () => {
             <IoSend className='w-8 h-8 text-gray-500'/>
         </div>
         </div>
-    ) : <></>
+    ) : 
+    <div className="flex flex-col h-screen w-full">
+        <div className='flex flex-col p-4 h-screen bg-gray-800 text-white justify-center items-center border-b border-gray-700'>
+            <img src={imgGuyWithDepression} className='w-52 h-52'/>
+            <span className='text-sm text-gray-400'>No conversations to show</span>
+        </div>
+    </div>
 };
 
 export default MessageContainer;
