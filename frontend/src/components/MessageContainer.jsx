@@ -3,8 +3,7 @@ import { useAuthContext } from '../../../backend/src/context/authContext';
 
 const MessageContainer = ({ targetId }) => {
     const { authUser } = useAuthContext();
-    console.log(authUser);
-
+    
     return (
         <div className="flex flex-col h-screen w-full">
         {/* Chat Header */}

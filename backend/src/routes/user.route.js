@@ -24,7 +24,7 @@ router.get("/all", authenticate, async(req, res) => {
                     message: m.messages
                 }))
 
-            res.status(200).json({ allUsers })
+            res.status(200).json({ users: allUsers })
         }
         else {
             return res.status(401).json({ message: "Unauthorized" })
