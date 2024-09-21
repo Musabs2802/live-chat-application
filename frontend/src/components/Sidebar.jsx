@@ -41,8 +41,6 @@ const Sidebar = () => {
         navigate("/login")
     }
 
-    console.log(conversations);
-
     return (
         <div className="w-1/4 h-screen bg-gray-900 text-white flex flex-col">
         {/* Sidebar Header */}

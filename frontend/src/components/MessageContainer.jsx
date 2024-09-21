@@ -1,34 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { IoSend } from "react-icons/io5";
 import { useAuthContext } from '../../../backend/src/context/authContext';
 import { useConversationContext } from '../../../backend/src/context/conversationContext';
 import axios from 'axios';
+import Chat from './Chat';
 
-const MessageContainer = ({ targetId }) => {
+const MessageContainer = () => {
     const { authUser } = useAuthContext();
-    const { currentConversation, setCurrentConversation } = useConversationContext();
+    const { currentConversation } = useConversationContext();
+    const [ messages, setMessages ] = useState([]);
 
-    console.log(currentConversation);
+    useEffect(() => {
+        const fetchConversation = async () => {
+            if (currentConversation) {
+                const res = await axios.get(`http://localhost:8080/api/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                if (res.status == 200) {
+                    const data = await res.data.conversation
+                    setMessages(data)
+                }
+                else {
+                    toast.error("Cannot fetch conversations !")
+                }
+            }
+        }
 
-    // useEffect(() => {
-    //     const fetchConversation = async () => {
-    //         const res = await axios.get(`http://localhost:8080/api/message/${currentConversation.id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-    //     }
-
-    //     fetchConversation()
-    // })
+        fetchConversation()
+    }, [currentConversation]);
     
-    return (
+    console.log(messages);
+
+    return currentConversation ? (
         <div className="flex flex-col h-screen w-full">
         {/* Chat Header */}
         <div className="p-4 bg-gray-800 text-white flex justify-between items-center border-b border-gray-700">
             <div className="flex items-center space-x-3">
             <div className="avatar">
                 <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
-                    <img src={authUser.displayPic}/>
+                    <img src={currentConversation.displayPic}/>
                 </div>
             </div>
             <div>
-                <h3 className="text-md font-sans">{authUser.firstName} {authUser.lastName}</h3>
+                <h3 className="text-md font-sans">{currentConversation.firstName} {currentConversation.lastName}</h3>
                 {/* <p className="text-sm text-gray-400">Last seen at 2:30 PM</p> */}
             </div>
             </div>
@@ -46,54 +58,23 @@ const MessageContainer = ({ targetId }) => {
             </div>
         </div>
 
-        {/* Chat Body - Messages */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
-            {/* Outgoing Message */}
-            <div className="chat chat-end mb-4">
-            <div className="chat-bubble" style={{ backgroundColor: '#D1C4E9', color: '#000000' }}>
-                Hey Alice, how are you doing?
-            </div>
-            <p className="text-xs text-gray-500 text-right">2:32 PM</p>
-            </div>
-
-            {/* Incoming Message */}
-            <div className="chat chat-start mb-4">
-            <div className="chat-bubble" style={{ backgroundColor: '#E1F5FE', color: '#000000' }}>
-                Hi! I’m doing great, thank you! How about you?
-            </div>
-            <p className="text-xs text-gray-500">2:35 PM</p>
-            </div>
-
-            {/* Another Outgoing Message */}
-            <div className="chat chat-end mb-4">
-            <div className="chat-bubble" style={{ backgroundColor: '#D1C4E9', color: '#000000' }}>
-                I’m good, just working on a project right now.
-            </div>
-            <p className="text-xs text-gray-500 text-right">2:36 PM</p>
-            </div>
-
-            {/* Incoming Message */}
-            <div className="chat chat-start mb-4">
-            <div className="chat-bubble" style={{ backgroundColor: '#E1F5FE', color: '#000000' }}>
-                That sounds awesome! Let’s catch up later this week.
-            </div>
-            <p className="text-xs text-gray-500">2:37 PM</p>
-            </div>
-
-            {/* Add more messages here */}
+            {messages?.messages?.map((m) => (
+                <Chat key={m._id} message={m} incoming={m.receiverId==authUser.id} />
+            ))}
         </div>
 
         {/* Chat Input */}
-        <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3">
+        <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3 px-10 gap-5">
             <input
             type="text"
             placeholder="Type a message..."
             className="input input-bordered w-full"
             />
-            <button className="btn">Send</button>
+            <IoSend className='w-8 h-8 text-gray-500'/>
         </div>
         </div>
-    );
+    ) : <></>
 };
 
 export default MessageContainer;
