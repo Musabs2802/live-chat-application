@@ -12,7 +12,7 @@ const Conversation = ({ user, message, isSent }) => {
 		<li className="p-3 hover:bg-gray-800 cursor-pointer" onClick={handleConvoSelection}>
             <div className="flex items-center space-x-3">
               <div className="avatar">
-                <div className="w-12 rounded-full bg-blue-500 flex items-center justify-center">
+                <div className="w-12 rounded-full bg-gray-500 flex items-center justify-center">
                     <img src={user.displayPic}/>
                 </div>
               </div>
