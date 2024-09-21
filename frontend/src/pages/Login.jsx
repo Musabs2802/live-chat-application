@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -9,12 +10,19 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://localhost:8080/api/auth/login', { username, password })
-        if (res.status == 200) {
-            navigate('/')
+        try {
+            const res = await axios.post('http://localhost:8080/api/auth/login', { username, password })
+            console.log(res)
+            if (res.status == 200) {
+                toast.success("Login Successful !")
+                navigate('/')
+            }
+            else {
+                setError('Something is wrong !')
+            }
         }
-        else {
-            setError('Something is wrong !')
+        catch (error) {
+            toast.error("Something went wrong !")
         }
     };
 

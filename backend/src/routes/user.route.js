@@ -5,7 +5,7 @@ const Conversation = require("../models/conversation.model");
 
 const router = express.Router()
 
-router.get("/", authenticate, async(req, res) => {
+router.get("/all", authenticate, async(req, res) => {
     try {
         const user = await User.findById(req.user.id)
         if(user) {

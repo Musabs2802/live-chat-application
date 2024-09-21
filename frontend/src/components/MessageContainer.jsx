@@ -1,6 +1,7 @@
 import React from 'react';
 
-const MessageContainer = () => {
+const MessageContainer = ({ targetId }) => {
+
   return (
     <div className="flex flex-col h-screen w-full">
       {/* Chat Header */}
@@ -13,7 +14,7 @@ const MessageContainer = () => {
           </div>
           <div>
             <h3 className="text-md font-sans">Alice</h3>
-            <p className="text-sm text-gray-400">Last seen at 2:30 PM</p>
+            {/* <p className="text-sm text-gray-400">Last seen at 2:30 PM</p> */}
           </div>
         </div>
         <div className="flex items-center space-x-3">
@@ -31,7 +32,7 @@ const MessageContainer = () => {
       </div>
 
       {/* Chat Body - Messages */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
         {/* Outgoing Message */}
         <div className="chat chat-end mb-4">
           <div className="chat-bubble" style={{ backgroundColor: '#D1C4E9', color: '#000000' }}>
@@ -68,13 +69,13 @@ const MessageContainer = () => {
       </div>
 
       {/* Chat Input */}
-      <div className="p-4 bg-white border-gray-300 flex items-center space-x-3">
+      <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3">
         <input
           type="text"
           placeholder="Type a message..."
           className="input input-bordered w-full"
         />
-        <button className="btn btn-primary">Send</button>
+        <button className="btn">Send</button>
       </div>
     </div>
   );
