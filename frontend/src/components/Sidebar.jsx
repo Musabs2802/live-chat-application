@@ -65,9 +65,9 @@ const Sidebar = () => {
 
         <div className="flex-1 overflow-y-auto bg-gray-900">
             <ul className="divide-y divide-gray-700">
-                {conversations.length > 0 ? conversations?.map((convo) => {
-                    <Conversation key={convo._id} user={convo} />
-                }) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
+                {conversations.length > 0 ? conversations.map((convo, id) => (
+                    <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id}/>
+                )) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
                         <span className='text-sm text-gray-400'>No conversations to show</span>
                     </div>}
             </ul>

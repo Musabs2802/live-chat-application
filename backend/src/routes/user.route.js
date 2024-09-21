@@ -20,8 +20,8 @@ router.get("/all", authenticate, async(req, res) => {
               .select('participants messages -_id')
 
             allUsers = allUsers.map(m => (
-                { user: m.participants.filter(f => !f._id.equals(user._id)), 
-                    message: m.messages
+                { user: m.participants.filter(f => !f._id.equals(user._id))[0], 
+                    message: m.messages[0]
                 }))
 
             res.status(200).json({ users: allUsers })

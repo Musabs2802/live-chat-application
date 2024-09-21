@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuthContext } from '../../../backend/src/context/authContext';
+import { useConversationContext } from '../../../backend/src/context/conversationContext';
+import axios from 'axios';
 
 const MessageContainer = ({ targetId }) => {
     const { authUser } = useAuthContext();
+    const { currentConversation, setCurrentConversation } = useConversationContext();
+
+    console.log(currentConversation);
+
+    // useEffect(() => {
+    //     const fetchConversation = async () => {
+    //         const res = await axios.get(`http://localhost:8080/api/message/${currentConversation.id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+    //     }
+
+    //     fetchConversation()
+    // })
     
     return (
         <div className="flex flex-col h-screen w-full">
