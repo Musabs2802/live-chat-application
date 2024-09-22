@@ -3,6 +3,7 @@ const authenticate = require("../middlewares/authenticate.middleware");
 const User = require("../models/user.model");
 const Conversation = require("../models/conversation.model");
 const Message = require("../models/message.model");
+const { io, getReceiverSocketId } = require("../config/socket.config");
 
 const router = express.Router();
 
@@ -53,6 +54,11 @@ router.post("/send/:targetId", authenticate, async(req, res) => {
             conversation.messages.push(newMessage)
 
             await Promise.all([conversation.save(), newMessage.save()])
+
+            const receiverSocketId = getReceiverSocketId(targetId)
+            if(receiverSocketId) {
+                io.to(receiverSocketId).emit("newMessage", newMessage)
+            }
 
             res.status(201).json({ newMessage })
         }

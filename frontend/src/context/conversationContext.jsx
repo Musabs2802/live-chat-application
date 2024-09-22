@@ -7,9 +7,10 @@ export const useConversationContext = () => {
 }
 
 export const ConversationContextProvider = ({ children }) => {
-    const [currentConversation, setCurrentConversation] = useState(null)
+    const [ currentConversation, setCurrentConversation ] = useState(null)
+    const [ messages, setMessages ] = useState([]);
 
-    return <ConversationContext.Provider value={{ currentConversation, setCurrentConversation }}>
+    return <ConversationContext.Provider value={{ currentConversation, setCurrentConversation, messages, setMessages }}>
         {children}
     </ConversationContext.Provider>
 }

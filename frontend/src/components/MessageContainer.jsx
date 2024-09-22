@@ -1,23 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoSend } from "react-icons/io5";
 import { useAuthContext } from '../context/authContext';
 import { useConversationContext } from '../context/conversationContext';
 import imgGuyWithDepression from '../assets/guy-with-depression.png';
 import axios from 'axios';
 import Chat from './Chat';
+import { useSocketContext } from '../context/socketContext';
 
 const MessageContainer = () => {
     const { authUser } = useAuthContext();
-    const { currentConversation } = useConversationContext();
-    const [ messages, setMessages ] = useState([]);
+    const { socket } = useSocketContext();
+    const { currentConversation, messages, setMessages } = useConversationContext();
     const [ inputMessage, setInputMessage ] = useState();
 
+    useEffect(() => {
+        socket?.on("newMessage", (newMessage) => {
+            setMessages([ ...messages, newMessage ])
+        })
+
+        return () => socket?.off("newMessage")
+    }, [ socket, setMessages, messages ])
+    
     useEffect(() => {
         const fetchConversation = async () => {
             if (currentConversation) {
                 const res = await axios.get(`http://localhost:8080/api/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
                 if (res.status == 200) {
-                    const data = await res.data.conversation
+                    const data = await res.data.conversation.messages
                     setMessages(data)
                 }
                 else {
@@ -28,7 +37,7 @@ const MessageContainer = () => {
 
         fetchConversation()
     }, [currentConversation]);
-    
+
     const handleNewMessageSent = async () => {
         try {
             if(inputMessage.trim() !== '') {
@@ -64,7 +73,7 @@ const MessageContainer = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
-            {messages?.messages?.map((m) => (
+            {messages?.map((m) => (
                 <Chat key={m._id} message={m} incoming={m.receiverId==authUser.id} />
             ))}
         </div>
