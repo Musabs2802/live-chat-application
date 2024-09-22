@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IoSend } from "react-icons/io5";
 import { useAuthContext } from '../context/authContext';
 import { useConversationContext } from '../context/conversationContext';
-import imgGuyWithDepression from '../assets/guy-with-depression.png';
+import imgGuyWithDepression from '../assets/images/guy-with-depression.png';
+import notificationSound from '../assets/audios/notification.mp3';
 import axios from 'axios';
 import Chat from './Chat';
 import { useSocketContext } from '../context/socketContext';
@@ -28,6 +29,9 @@ const MessageContainer = () => {
                 ...prevMessages,
                 { ...newMessage, isNew: true }
             ]);
+            const audio = new Audio(notificationSound);
+            audio.play();
+
             scrollToBottom();
         });
 
