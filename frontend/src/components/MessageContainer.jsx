@@ -12,14 +12,27 @@ const MessageContainer = () => {
     const { socket } = useSocketContext();
     const { currentConversation, messages, setMessages } = useConversationContext();
     const [ inputMessage, setInputMessage ] = useState();
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
         socket?.on("newMessage", (newMessage) => {
-            setMessages([ ...messages, newMessage ])
-        })
+            setMessages(prevMessages => [
+                ...prevMessages,
+                { ...newMessage, isNew: true }
+            ]);
+            scrollToBottom();
+        });
 
-        return () => socket?.off("newMessage")
-    }, [ socket, setMessages, messages ])
+        return () => socket?.off("newMessage");
+    }, [socket, setMessages]);
     
     useEffect(() => {
         const fetchConversation = async () => {
@@ -74,8 +87,14 @@ const MessageContainer = () => {
 
         <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
             {messages?.map((m) => (
-                <Chat key={m._id} message={m} incoming={m.receiverId==authUser.id} />
+                <Chat 
+                    key={m._id} 
+                    message={m} 
+                    incoming={m.receiverId === authUser.id}
+                    isNew={m.isNew}
+                />
             ))}
+            <div ref={messagesEndRef} />
         </div>
 
         {/* Chat Input */}
