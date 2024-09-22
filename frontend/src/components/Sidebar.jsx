@@ -6,11 +6,13 @@ import { useAuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useSocketContext } from '../context/socketContext';
 
 const Sidebar = () => {
     const navigate = useNavigate();
     
     const { authUser, setAuthUser } = useAuthContext();
+    const { onlineUsers } = useSocketContext();
     const [ conversations, setConversations ] = useState([]);
     const [ searchUsers, setSearchUsers ] = useState([]);
     
@@ -64,7 +66,7 @@ const Sidebar = () => {
     }
 
     return (
-        <div className="w-1/4 h-screen bg-gray-900 text-white flex flex-col">
+        <div className="w-1/4 sm:w-1/2 h-screen bg-gray-900 text-white flex flex-col">
         {/* Sidebar Header */}
         <div className="p-4 flex items-center justify-between bg-gray-800 border-gray-700">
             <h2 className="card-title text-center">Chats</h2>
@@ -86,9 +88,9 @@ const Sidebar = () => {
         <div className="flex-1 overflow-y-auto bg-gray-900">
             <ul className="divide-y divide-gray-700">
                 {searchUsers.length > 0 ? searchUsers.map((u, id) => (
-                    <Conversation key={u._id} user={u} />
+                    <Conversation key={u._id} user={u} isOnline={onlineUsers.includes(u._id)}/>
                 )) : conversations.length > 0 ? conversations.map((convo, id) => (
-                    <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id}/>
+                    <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id} isOnline={onlineUsers.includes(convo.user._id)}/>
                 )) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
                         <span className='text-sm text-gray-400'>No available chats</span>
                     </div>}
