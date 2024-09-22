@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoSend } from "react-icons/io5";
-import { useAuthContext } from '../../../backend/src/context/authContext';
-import { useConversationContext } from '../../../backend/src/context/conversationContext';
+import { useAuthContext } from '../context/authContext';
+import { useConversationContext } from '../context/conversationContext';
 import imgGuyWithDepression from '../assets/guy-with-depression.png';
 import axios from 'axios';
 import Chat from './Chat';

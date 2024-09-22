@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PiSignOutBold } from "react-icons/pi";
 import SearchBar from './SearchBar';
 import Conversation from './Conversation';
-import { useAuthContext } from '../../../backend/src/context/authContext';
+import { useAuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';

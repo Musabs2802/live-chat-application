@@ -1,5 +1,5 @@
 import React from 'react'
-import { useConversationContext } from '../../../backend/src/context/conversationContext';
+import { useConversationContext } from '../context/conversationContext';
 
 const Conversation = ({ user, message, isSent }) => {
     const { setCurrentConversation } = useConversationContext();
