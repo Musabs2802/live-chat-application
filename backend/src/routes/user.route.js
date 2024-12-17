@@ -30,7 +30,7 @@ router.get("/all", authenticate, async(req, res) => {
             return res.status(401).json({ message: "Unauthorized" })
         }
     }
-    catch(error) {
+    catch (error) {
         return res.status(500).json({ message: error.message });
     }
 })

@@ -4,7 +4,6 @@ const messageRouter = require("./src/routes/message.route");
 const userRouter = require("./src/routes/user.route.js");
 const connectDB = require("./src/config/db.config.js");
 const { app, server } = require("./src/config/socket.config.js");
-
 require("dotenv").config();
 
 app.use(cors({

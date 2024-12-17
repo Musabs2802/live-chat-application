@@ -11,7 +11,7 @@ async function authenticate(req, res, next) {
             next()
         }
         else {
-            return res.status(401).json({message: 'Access token not found'})
+            return res.status(401).json({ message: 'Access token not found' })
         }
     }
     catch (error) {

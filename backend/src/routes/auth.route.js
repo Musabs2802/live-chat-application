@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
 
         const user = await User.findOne({ username })
         if (user) {
-            return res.status(409).json({message: 'User Already Exists'})
+            return res.status(409).json({ message: 'User Already Exists' })
         }
 
         const hash = await bcrypt.hash(password, 10)
@@ -39,7 +39,6 @@ router.post("/signup", async (req, res) => {
         res.status(201).json({ message: "Item created", _id: newUser._id })
     } 
     catch (error) {
-        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 });
