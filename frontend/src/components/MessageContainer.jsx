@@ -41,7 +41,7 @@ const MessageContainer = () => {
     useEffect(() => {
         const fetchConversation = async () => {
             if (currentConversation) {
-                const res = await axios.get(`http://localhost:8080/api/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
                 if (res.status == 200) {
                     const data = await res.data.conversation.messages
                     setMessages(data)
@@ -58,7 +58,7 @@ const MessageContainer = () => {
     const handleNewMessageSent = async () => {
         try {
             if(inputMessage.trim() !== '') {
-                await axios.post(`http://localhost:8080/api/message/send/${currentConversation._id}`, { message: inputMessage }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                await axios.post(`${import.meta.env.VITE_SERVER_URL}/message/send/${currentConversation._id}`, { message: inputMessage }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
             }
         }
         catch (error) {

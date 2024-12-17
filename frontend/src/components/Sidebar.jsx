@@ -21,7 +21,7 @@ const Sidebar = () => {
             const query = e.target.value
 
             if (query) {
-                const res = await axios.get(`http://localhost:8080/api/user/search/${query}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/search/${query}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
                 if (res.status == 200) {
                     setSearchUsers(res.data)
                 }
@@ -41,7 +41,7 @@ const Sidebar = () => {
     useEffect(() => {
         const getConversations = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/user/all', { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/all`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
                 if (res.status == 200) {
                     setConversations(res.data?.users)
                 }

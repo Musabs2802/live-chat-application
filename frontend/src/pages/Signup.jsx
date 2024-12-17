@@ -27,7 +27,7 @@ const Signup = () => {
         setError('Passwords do not match');
         } else {
             setError('');
-            const res = await axios.post('http://localhost:8080/api/auth/signup', {...formData})
+            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/signup`, {...formData})
             if (res.status == 201) {
                 toast.success("User registered")
                 navigate('/login')
