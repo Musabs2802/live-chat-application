@@ -41,7 +41,6 @@ const MessageContainer = () => {
     useEffect(() => {
         const fetchConversation = async () => {
             if (currentConversation) {
-                
                 axios.get(`${import.meta.env.VITE_SERVER_URL}/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
                 .then(async (res) => {
                     const data = await res.data.conversation.messages
@@ -83,7 +82,7 @@ const MessageContainer = () => {
 
     return currentConversation ? (
         <div className="flex flex-col h-screen w-full">
-        {/* Chat Header */}
+            {/* Chat Header */}
             <div className="p-4 bg-gray-800 text-white flex justify-between items-center border-b border-gray-700">
                 <div className="flex items-center space-x-3">
                 <div className="avatar">

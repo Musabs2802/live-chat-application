@@ -3,10 +3,11 @@ import { useConversationContext } from '../context/conversationContext';
 import { formatTimestamp } from '../utils/utils';
 
 const Conversation = ({ user, message, isSent, isOnline }) => {
-    const { setCurrentConversation } = useConversationContext();
+    const { setCurrentConversation, setProfilePage } = useConversationContext();
 
     const handleConvoSelection = (e) => {
         setCurrentConversation(user)
+        setProfilePage(false)
     }
 
 	return (

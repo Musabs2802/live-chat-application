@@ -56,7 +56,7 @@ const Login = () => {
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     placeholder="Enter your username"
-                                    className="input input-bordered rounded-lg px-4 py-2 shadow-inner bg-gray-50"
+                                    className="input input-bordered rounded-lg px-4 py-2 shadow-inner text-gray-700 bg-gray-50"
                                     required
                                 />
                             </div>
@@ -70,7 +70,7 @@ const Login = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password"
-                                    className="input input-bordered rounded-lg px-4 py-2 shadow-inner bg-gray-50"
+                                    className="input input-bordered rounded-lg px-4 py-2 shadow-inner text-gray-700 bg-gray-50"
                                     required
                                 />
                             </div>

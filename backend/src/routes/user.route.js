@@ -5,6 +5,43 @@ const Conversation = require("../models/conversation.model");
 
 const router = express.Router()
 
+router.get("/me", authenticate, async(req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+        if(user) {
+            res.status(200).json({ user })
+        }
+        else {
+            return res.status(401).json({ message: "Unauthorized" })
+        }
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
+
+router.put("/me", authenticate, async(req, res) => {
+    try {
+        const { firstName, lastName, gender } = req.body
+
+        if (!firstName || !lastName || !gender) {
+            return res.status(422).json({ message: "Field(s) missing" })
+        }
+
+        const user = await User.findOne({ username })
+        if (user) {
+            return res.status(401).json({ message: "No User Found !" })
+        }
+        else {
+            
+        }
+
+    }
+    catch(error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
+
 router.get("/all", authenticate, async(req, res) => {
     try {
         const user = await User.findById(req.user.id)

@@ -8,9 +8,10 @@ export const useConversationContext = () => {
 
 export const ConversationContextProvider = ({ children }) => {
     const [ currentConversation, setCurrentConversation ] = useState(null)
+    const [ isProfilePage, setProfilePage ] = useState(false)
     const [ messages, setMessages ] = useState([]);
 
-    return <ConversationContext.Provider value={{ currentConversation, setCurrentConversation, messages, setMessages }}>
+    return <ConversationContext.Provider value={{ currentConversation, setCurrentConversation, messages, setMessages, isProfilePage, setProfilePage }}>
         {children}
     </ConversationContext.Provider>
 }
