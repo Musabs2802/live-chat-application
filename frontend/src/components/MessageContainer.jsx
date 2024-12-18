@@ -84,47 +84,53 @@ const MessageContainer = () => {
     return currentConversation ? (
         <div className="flex flex-col h-screen w-full">
         {/* Chat Header */}
-        <div className="p-4 bg-gray-800 text-white flex justify-between items-center border-b border-gray-700">
-            <div className="flex items-center space-x-3">
-            <div className="avatar">
-                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
-                    <img src={currentConversation.displayPic}/>
+            <div className="p-4 bg-gray-800 text-white flex justify-between items-center border-b border-gray-700">
+                <div className="flex items-center space-x-3">
+                <div className="avatar">
+                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                        <img src={currentConversation.displayPic}/>
+                    </div>
+                </div>
+                <div>
+                    <h3 className="text-md font-sans">{currentConversation.firstName} {currentConversation.lastName}</h3>
+                    {/* <p className="text-sm text-gray-400">Last seen at 2:30 PM</p> */}
+                </div>
+                </div>
+                <div className="flex items-center space-x-3">
+
                 </div>
             </div>
-            <div>
-                <h3 className="text-md font-sans">{currentConversation.firstName} {currentConversation.lastName}</h3>
-                {/* <p className="text-sm text-gray-400">Last seen at 2:30 PM</p> */}
-            </div>
-            </div>
-            <div className="flex items-center space-x-3">
 
+            <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
+                {messages?.map((m) => (
+                    <Chat 
+                        key={m._id} 
+                        message={m} 
+                        incoming={m.receiverId === authUser.id}
+                        isNew={m.isNew}
+                    />
+                ))}
+                <div ref={messagesEndRef} />
             </div>
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-4 bg-gray-800">
-            {messages?.map((m) => (
-                <Chat 
-                    key={m._id} 
-                    message={m} 
-                    incoming={m.receiverId === authUser.id}
-                    isNew={m.isNew}
+            {/* Chat Input */}
+            <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3 px-10 gap-5">
+                <textarea
+                    type="text"
+                    placeholder="Type a message..."
+                    className="textarea textarea-bordered w-full text-sm"
+                    rows={2}
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleNewMessageSent();
+                        }
+                    }}
                 />
-            ))}
-            <div ref={messagesEndRef} />
-        </div>
-
-        {/* Chat Input */}
-        <div className="p-4 bg-gray-800 border-gray-300 flex items-center space-x-3 px-10 gap-5">
-            <textarea
-                type="text"
-                placeholder="Type a message..."
-                className="textarea textarea-bordered w-full text-sm"
-                rows={2}
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-            />
-            <IoSend className='w-10 h-10 text-gray-500 bg-gray-800 hover:bg-gray-700 p-2 rounded-lg' onClick={handleNewMessageSent}/>
-        </div>
+                <IoSend className='w-10 h-10 text-gray-500 bg-gray-800 hover:bg-gray-700 p-2 rounded-lg' onClick={handleNewMessageSent}/>
+            </div>
         </div>
     ) : 
     <div className="flex flex-col h-screen w-full">

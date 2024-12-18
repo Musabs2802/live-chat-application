@@ -6,6 +6,7 @@ import { useAuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import notificationSound from '../assets/audios/notification.mp3';
 import { useSocketContext } from '../context/socketContext';
 
 const Sidebar = () => {
@@ -13,6 +14,7 @@ const Sidebar = () => {
     
     const { authUser, setAuthUser } = useAuthContext();
     const { onlineUsers } = useSocketContext();
+    const { socket } = useSocketContext();
     const [ conversations, setConversations ] = useState([]);
     const [ searchUsers, setSearchUsers ] = useState([]);
     
@@ -40,21 +42,44 @@ const Sidebar = () => {
         }
     }
 
+    const getConversations = async () => {
+        axios.get(`${import.meta.env.VITE_SERVER_URL}/user/all`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+        .then((res) => {
+            console.log(`Conversations ${res.data?.users}`)
+            setConversations(res.data?.users)
+        })
+        .catch((error) => {
+            if(error.response.status === 500) {
+                toast.error("Something is wrong!")
+            }
+            else {
+                toast.error(error.response.data.message)
+            }
+        })            
+    }
+
     useEffect(() => {
-        const getConversations = async () => {
-            axios.get(`${import.meta.env.VITE_SERVER_URL}/user/all`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-            .then((res) => {
-                setConversations(res.data?.users)
-            })
-            .catch((error) => {
-                if(error.response.status === 500) {
-                    toast.error("Something is wrong!")
-                }
-                else {
-                    toast.error(error.response.data.message)
-                }
-            })            
-        }
+        socket?.on("newMessage", (newMessage) => {
+            if (conversations.some(c => c.user._id === newMessage.senderId)) {
+                setConversations(prev => prev.map((c) => {
+                    if (c.user._id == newMessage.senderId) {
+                        return {...c, message: newMessage}
+                    }
+                    return c
+                }))
+            }
+            else {
+                getConversations()
+            }
+
+            const audio = new Audio(notificationSound);
+            audio.play();
+        });
+
+        return () => socket?.off("newMessage");
+    }, [socket]);
+
+    useEffect(() => {
         getConversations();
     }, [])
 
