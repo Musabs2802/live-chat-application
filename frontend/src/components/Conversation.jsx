@@ -1,5 +1,6 @@
 import React from 'react'
 import { useConversationContext } from '../context/conversationContext';
+import { formatTimestamp } from '../utils/utils';
 
 const Conversation = ({ user, message, isSent, isOnline }) => {
     const { setCurrentConversation } = useConversationContext();
@@ -9,7 +10,7 @@ const Conversation = ({ user, message, isSent, isOnline }) => {
     }
 
 	return (
-		<li className="p-3 hover:bg-gray-800 cursor-pointer" onClick={handleConvoSelection}>
+		<li className="p-3 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onClick={handleConvoSelection}>
             <div className="flex items-center space-x-3">
                 <div className="avatar relative">
                 <div className="w-12 rounded-full bg-gray-500 flex items-center justify-center relative">
@@ -21,6 +22,9 @@ const Conversation = ({ user, message, isSent, isOnline }) => {
                 <h3 className="text-md font-sans">{user.firstName} {user.lastName}</h3>
                 <p className="text-sm text-gray-400">{message ? isSent ? `Sent: ${message.message}` : message.message : user.username}</p>
                 </div>
+            </div>
+            <div className="text-sm text-gray-400">
+                { formatTimestamp(message.updatedAt) }
             </div>
         </li>
 

@@ -16,8 +16,8 @@ const Sidebar = () => {
     const [ conversations, setConversations ] = useState([]);
     const [ searchUsers, setSearchUsers ] = useState([]);
     
-    console.log(searchUsers);
-    
+    console.log(conversations);
+
     const handleSearch = async (e) => {
         const query = e.target.value
 
@@ -42,20 +42,19 @@ const Sidebar = () => {
 
     useEffect(() => {
         const getConversations = async () => {
-            try {
-                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/all`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-                if (res.status == 200) {
-                    setConversations(res.data?.users)
+            axios.get(`${import.meta.env.VITE_SERVER_URL}/user/all`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+            .then((res) => {
+                setConversations(res.data?.users)
+            })
+            .catch((error) => {
+                if(error.response.status === 500) {
+                    toast.error("Something is wrong!")
                 }
                 else {
-                    toast.error("Cannot fetch conversations !")
+                    toast.error(error.response.data.message)
                 }
-            }
-            catch(error) {
-                toast.error("Cannot fetch conversations !", error)
-            }
+            })            
         }
-
         getConversations();
     }, [])
 
