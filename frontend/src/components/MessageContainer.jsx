@@ -41,14 +41,20 @@ const MessageContainer = () => {
     useEffect(() => {
         const fetchConversation = async () => {
             if (currentConversation) {
-                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-                if (res.status == 200) {
+                
+                axios.get(`${import.meta.env.VITE_SERVER_URL}/message/${currentConversation._id}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+                .then(async (res) => {
                     const data = await res.data.conversation.messages
                     setMessages(data)
-                }
-                else {
-                    toast.error("Cannot fetch conversations !")
-                }
+                })
+                .catch((error) => {
+                    if(error.response.status === 500) {
+                        toast.error("Something is wrong!")
+                    }
+                    else {
+                        toast.error(error.response.data.message)
+                    }
+                })
             }
         }
 
@@ -56,16 +62,22 @@ const MessageContainer = () => {
     }, [currentConversation]);
 
     const handleNewMessageSent = async () => {
-        try {
-            if(inputMessage.trim() !== '') {
-                await axios.post(`${import.meta.env.VITE_SERVER_URL}/message/send/${currentConversation._id}`, { message: inputMessage }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-            }
-        }
-        catch (error) {
-
-        }
-        finally {
-            setInputMessage('');
+        if(inputMessage.trim() !== '') {
+            axios.post(`${import.meta.env.VITE_SERVER_URL}/message/send/${currentConversation._id}`, { message: inputMessage }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+            .then((res) => {
+                setMessages((prev) => [...prev, res.data.newMessage])
+            })
+            .catch((error) => {
+                if(error.response.status === 500) {
+                    toast.error("Something is wrong!")
+                }
+                else {
+                    toast.error(error.response.data.message)
+                }
+            })
+            .finally(() => {
+                setInputMessage('');
+            })
         }
     }
 

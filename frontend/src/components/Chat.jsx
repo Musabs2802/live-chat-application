@@ -5,7 +5,7 @@ const Chat = ({ message, incoming, isNew }) => {
 
     return incoming ? (
                 <div className={`chat chat-start mb-4 ${isNew ? 'animate-shake' : ''}`}>
-                    <div className="chat-bubble" style={{ backgroundColor: '#161b26', color: '#FFFFFF' }}>
+                    <div className="chat-bubble" style={{ backgroundColor: '#374151', color: '#FFFFFF' }}>
                         <p className='text-sm'>{message.message}</p>
                     </div>
                     <p className="text-xs text-gray-500">{formattedTime}</p>
