@@ -16,25 +16,27 @@ const Sidebar = () => {
     const [ conversations, setConversations ] = useState([]);
     const [ searchUsers, setSearchUsers ] = useState([]);
     
+    console.log(searchUsers);
+    
     const handleSearch = async (e) => {
-        try {
-            const query = e.target.value
+        const query = e.target.value
 
-            if (query) {
-                const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/search/${query}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
-                if (res.status == 200) {
-                    setSearchUsers(res.data)
+        if (query) {
+            axios.get(`${import.meta.env.VITE_SERVER_URL}/user/search/${query}`, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+            .then((res) => {
+                setSearchUsers(res.data)
+            })
+            .catch((error) => {
+                if(error.response.status === 500) {
+                    toast.error("Something is wrong!")
                 }
                 else {
-                    toast.error("Cannot fetch users !")
+                    toast.error(error.response.data.message)
                 }
-            }
-            else {
-                setSearchUsers([]);
-            }
+            })
         }
-        catch (error) {
-            console.log(error)
+        else {
+            setSearchUsers([]);
         }
     }
 
@@ -92,7 +94,7 @@ const Sidebar = () => {
                 )) : conversations.length > 0 ? conversations.map((convo, id) => (
                     <Conversation key={convo.user._id} user={convo.user} message={convo.message} isSent={convo.message.senderId == authUser.id} isOnline={onlineUsers.includes(convo.user._id)}/>
                 )) : <div className="p-3 hover:bg-gray-800 cursor-pointer">
-                        <span className='text-sm text-gray-400'>No available chats</span>
+                        <span className='text-sm text-gray-400 mx-3'>No available chats</span>
                     </div>}
             </ul>
         </div>

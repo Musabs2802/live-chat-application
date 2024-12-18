@@ -44,8 +44,10 @@ router.get('/search/:query', authenticate, async(req, res) => {
               { firstName: { $regex: query, $options: 'i' } },
               { lastName: { $regex: query, $options: 'i' } },
               { username: { $regex: query, $options: 'i' } }
-            ]
+            ],
+            _id: { $ne: req.user.id }
         })
+        .select('_id firstName lastName displayPic username');
 
         res.status(200).json(users)
     }
