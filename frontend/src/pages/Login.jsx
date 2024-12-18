@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import imgCHLogo from '../assets/images/ch-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 
@@ -13,22 +14,23 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, { username, password });
-            if (res.status === 200) {
-                localStorage.setItem("authUser", JSON.stringify(res.data));
-                setAuthUser(res.data);
+        
+        axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, { username, password })
+        .then((res) => {
+            localStorage.setItem("authUser", JSON.stringify(res.data));
+            setAuthUser(res.data);
 
-                toast.success("Login Successful!");
-                navigate('/');
-            } else {
-                // TODO: Show error message
-                toast.error("Something is wrong!");
+            toast.success("Login Successful!");
+            navigate('/');
+        })
+        .catch((error) => {
+            if(error.response.status === 500) {
+                toast.error("Something is wrong!")
             }
-        } catch (error) {
-            console.log("Error", error);
-            toast.error("Something went wrong!");
-        }
+            else {
+                toast.error(error.response.data.message)
+            }
+        })
     };
 
     return (
@@ -115,6 +117,11 @@ const Login = () => {
                             <p className="text-sm mt-2">Enjoy easy and meaningful conversations.</p>
                         </div>
                     </div>
+                </div>
+                {/* Footer - Image and text */}
+                <div className="absolute bottom-4 right-4 flex items-center text-sm text-white">
+                    <span>by </span>
+                    <img src={imgCHLogo} alt="CodeHabitat" className="h-8" />
                 </div>
             </div>
         </div>

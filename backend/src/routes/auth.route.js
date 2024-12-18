@@ -71,11 +71,11 @@ router.post("/login", async (req, res) => {
                     updatedAt: user.updatedAt })
             }
             else {
-                return res.status(401).json({ message: "Unauthorized" })
+                return res.status(401).json({ message: "Wrong Password" })
             }
         }
         else {
-            return res.status(401).json({ message: "Unauthorized" })
+            return res.status(401).json({ message: "No User Found !" })
         }
     } 
     catch (error) {

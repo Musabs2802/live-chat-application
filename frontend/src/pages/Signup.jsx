@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import imgCHLogo from '../assets/images/ch-logo.png';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -16,8 +17,6 @@ const Signup = () => {
         confirmPassword: '',
     });
 
-    const [error, setError] = useState('');
-
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -25,22 +24,21 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            toast.error('Passwords do not match');
         } else {
-            setError('');
-            try {
-                const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/signup`, { ...formData });
-                if (res.status === 201) {
-                    toast.success("User registered successfully!");
-                    navigate('/login');
-                } else {
-                    // TODO: Show error message
-                    setError('Something went wrong!');
+            axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/signup`, { ...formData })
+            .then((res) => {
+                toast.success("User registered successfully!");
+                navigate('/login');
+            })
+            .catch((error) => {
+                if(error.response.status === 500) {
+                    toast.error("Something is wrong!")
                 }
-            } catch (error) {
-                console.log("Error", error);
-                toast.error("An error occurred during signup!");
-            }
+                else {
+                    toast.error(error.response.data.message)
+                }
+            })
         }
     };
 
@@ -56,6 +54,11 @@ const Signup = () => {
                     <p className="text-lg max-w-md mb-6">
                         Experience secure and anonymous chats with <span className="font-extrabold">Invisible</span> by CodeHabitat.
                     </p>
+                </div>
+                {/* Footer - Image and text */}
+                <div className="absolute bottom-4 left-4 flex items-center text-sm text-white">
+                    <span>by </span>
+                    <img src={imgCHLogo} alt="CodeHabitat" className="h-8" />
                 </div>
             </div>
 
@@ -191,7 +194,7 @@ const Signup = () => {
                                 </div>
                             </div>
 
-                            {error && <div className="text-red-500 text-sm text-center mb-4">{error}</div>}
+                            {/* {error && <div className="text-red-500 text-sm text-center mb-4">{error}</div>} */}
 
                             <Link to="/login" className="text-sm text-blue-500 hover:underline mt-2 inline-block">
                                 Already have an account? Log in
