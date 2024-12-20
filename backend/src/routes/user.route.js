@@ -28,14 +28,19 @@ router.put("/me", authenticate, async(req, res) => {
             return res.status(422).json({ message: "Field(s) missing" })
         }
 
-        const user = await User.findOne({ username })
+        const user = await User.findOne(req.user.id)
         if (user) {
             return res.status(401).json({ message: "No User Found !" })
         }
         else {
-            
-        }
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.gender = gender;
 
+            await user.save();
+
+            return res.status(200).json({})
+        }
     }
     catch(error) {
         return res.status(500).json({ message: error.message });

@@ -64,13 +64,29 @@ const ProfileEdit = () => {
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-        toast.error('Passwords do not match');
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+        return toast.error('Passwords do not match');
+    }
+    else if (passwordData.oldPassword === passwordData.newPassword) {
+        return toast.error('New Password is same as old one')
     }
     else {
-
+      axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/change-password`, { ...passwordData }, { headers: { Authorization: `Bearer ${authUser.accessToken}` } })
+      .then((res) => {
+        toast.success("Password Changed !")
+      })
+      .catch((error) => {
+        console.log(error)
+        if(error.response.status === 500) {
+          toast.error("Something is wrong!")
+      }
+      else {
+        console.log(error.response)
+          toast.error(error.response.data.message)
+      }
+      })
     }
-    }
+  }
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
@@ -214,15 +230,15 @@ const handleAccountDelete = () => {
                     <h3 className="text-lg font-semibold mb-6">Change Password</h3>
 
                     <div className="mb-4">
-                    <label htmlFor="currentPassword" className="block text-sm font-medium">
+                    <label htmlFor="oldPassword" className="block text-sm font-medium">
                         Current Password
                     </label>
                     <input
                         type="password"
-                        id="currentPassword"
-                        name="currentPassword"
+                        id="oldPassword"
+                        name="oldPassword"
                         placeholder="•••••"
-                        value={profile.currentPassword}
+                        value={passwordData.oldPassword}
                         onChange={handlePasswordChange}
                         className="w-full p-2 mt-1 text-sm rounded-md bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
@@ -235,11 +251,11 @@ const handleAccountDelete = () => {
                             New Password
                             </label>
                             <input
-                            type="password"
+                            type="text"
                             id="newPassword"
                             name="newPassword"
                             placeholder="•••••"
-                            value={profile.newPassword}
+                            value={passwordData.newPassword}
                             onChange={handlePasswordChange}
                             className="w-full p-2 mt-1 text-sm rounded-md bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
@@ -251,11 +267,11 @@ const handleAccountDelete = () => {
                             Confirm New Password
                             </label>
                             <input
-                            type="password"
+                            type="text"
                             id="confirmPassword"
                             name="confirmPassword"
                             placeholder="•••••"
-                            value={profile.confirmPassword}
+                            value={passwordData.confirmPassword}
                             onChange={handlePasswordChange}
                             className="w-full p-2 mt-1 text-sm rounded-md bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required

@@ -1,4 +1,5 @@
 const express = require("express");
+const authenticate = require("../middlewares/authenticate.middleware");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require("../models/user.model");
@@ -82,6 +83,43 @@ router.post("/login", async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 });
+
+router.post('/change-password', authenticate, async(req, res) => {
+    try {
+        const { oldPassword, newPassword, confirmPassword } = req.body
+
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            return res.status(422).json({ message: "Field(s) missing" })
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: "Password do not match" })
+        }
+
+        const user = await User.findById(req.user.id)
+        if (user) {
+            const isPasswordMatch = await bcrypt.compare(oldPassword, user.password)
+            if (isPasswordMatch) {
+                const hash = await bcrypt.hash(newPassword, 10)
+
+                user.password = hash
+                await user.save()
+
+                res.status(200).json({ message: "Password Changed" })
+            }
+            else {
+                return res.status(401).json({ message: "Wrong Password" })
+            }
+        }
+        else {
+            return res.status(401).json({ message: "No User Found !" })
+        }
+    }
+    catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ message: error.message });
+    }
+})
 
 router.post("/logout", async (req, res) => {
     try {
