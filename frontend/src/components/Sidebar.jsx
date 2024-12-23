@@ -89,7 +89,7 @@ const Sidebar = () => {
                         onClick={() => setProfilePage(true)}
                     >
                         <img
-                            src="https://avatar.iran.liara.run/public/boy"
+                            src={authUser.displayPic}
                             alt="Profile"
                         />
                     </div>

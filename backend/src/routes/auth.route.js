@@ -24,8 +24,9 @@ router.post("/signup", async (req, res) => {
         }
 
         const hash = await bcrypt.hash(password, 10)
-
-        let randomPic = gender == "male" ? "https://avatar.iran.liara.run/public/boy" : "https://avatar.iran.liara.run/public/girl"
+        let maleAvatars = Array.from({ length: 50 }, (_, i) => i + 1)
+        let femaleAvatars = Array.from({ length: 50 }, (_, i) => i + 51)
+        let randomPic = gender == "male" ? `https://avatar.iran.liara.run/public/${maleAvatars[Math.floor(Math.random() * maleAvatars.length)]}` : `https://avatar.iran.liara.run/public/${femaleAvatars[Math.floor(Math.random() * femaleAvatars.length)]}`
 
         const newUser = new User({
             firstName,
