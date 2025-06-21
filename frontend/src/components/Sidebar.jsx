@@ -10,8 +10,7 @@ import notificationSound from '../assets/audios/notification.mp3';
 import { useConversationContext } from '../context/conversationContext';
 
 const Sidebar = () => {
-    const navigate = useNavigate();
-    const { authUser, setAuthUser } = useAuthContext();
+    const { authUser } = useAuthContext();
     const { onlineUsers, socket } = useSocketContext();
     const { setProfilePage } = useConversationContext();
     const [conversations, setConversations] = useState([]);
@@ -71,7 +70,6 @@ const Sidebar = () => {
             new Audio(notificationSound).play();
         });
 
-        return () => socket?.off("newMessage");
     }, [socket, conversations]);
 
     useEffect(() => {

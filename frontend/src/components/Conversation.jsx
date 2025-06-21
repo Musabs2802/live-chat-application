@@ -25,7 +25,7 @@ const Conversation = ({ user, message, isSent, isOnline }) => {
                 </div>
             </div>
             <div className="text-sm text-gray-400">
-                { formatTimestamp(message.updatedAt) }
+                { message?.updatedAt && formatTimestamp(message?.updatedAt) }
             </div>
         </li>
 
